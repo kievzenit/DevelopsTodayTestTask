@@ -5,13 +5,6 @@ BEGIN
     BEGIN 
         CREATE DATABASE CabDb;
     END
-    
-    IF NOT EXISTS (SELECT 1 FROM sys.sql_logins WHERE name = 'cabUser')
-    BEGIN
-        CREATE LOGIN cabUser WITH PASSWORD = 'Some_password123', DEFAULT_DATABASE = CabDb;
-        CREATE USER cabUser FOR LOGIN cabUser;
-        GRANT ALL ON CabData TO cabUser;
-    END
 END
 GO
 
@@ -49,4 +42,22 @@ EXECUTE dbo.uspSetupTable
 GO
 
 DROP PROCEDURE dbo.uspSetupTable
+GO
+
+CREATE PROCEDURE dbo.uspSetupUser
+AS
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM sys.sql_logins WHERE name = 'cabUser')
+    BEGIN
+        CREATE LOGIN cabUser WITH PASSWORD = 'Some_password123', DEFAULT_DATABASE = CabDb;
+        CREATE USER cabUser FOR LOGIN cabUser;
+        GRANT ALL ON CabData TO cabUser;
+    END
+END
+GO
+
+EXECUTE dbo.uspSetupUser
+GO
+
+DROP PROCEDURE dbo.uspSetupUser
 GO
